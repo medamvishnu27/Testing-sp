@@ -1,0 +1,47 @@
+const path = require('path');
+
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  // 🔒 Force Webpack (disable Turbopack)
+  
+
+  images: {
+    unoptimized: false,
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'firebasestorage.googleapis.com',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
+        pathname: '/**',
+      },
+      {
+        protocol: "https",
+        hostname: "storage.scalenut.com", // ✅ ADD THIS
+        pathname: "/**",
+      },
+    ],
+  },
+
+  webpack: (config) => {
+    config.resolve.alias['@'] = path.resolve(__dirname, 'src');
+    return config;
+  },
+
+  // ✅ Redirect www → non-www
+  async redirects() {
+    return [
+      {
+        source: '/:path*',
+        has: [{ type: 'host', value: 'www.socialprachar.com' }],
+        destination: 'https://socialprachar.com/:path*',
+        permanent: true,
+      },
+    ];
+  },
+};
+
+module.exports = nextConfig;
