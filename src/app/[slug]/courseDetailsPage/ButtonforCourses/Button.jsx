@@ -1,34 +1,72 @@
 /** @format */
+
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
+
 import Buttonstyle from "./Button.module.css";
 import SignInForm from "@/components/Forms/coursesForm";
 
 const Button = ({ label, courseID, actionType }) => {
   const [isPopupVisible, setIsPopupVisible] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
 
-  const openPopup = () => {
-    setIsPopupVisible(true);
+  /*
+   * Portal should only render after the component
+   * has mounted in the browser.
+   *
+   * This prevents document/body access during SSR.
+   */
+  useEffect(() => {
+    setIsMounted(true);
+
+    return () => {
+      setIsMounted(false);
+    };
+  }, []);
+
+  /*
+   * Open / close popup
+   */
+  const togglePopup = () => {
+    setIsPopupVisible((previousState) => !previousState);
   };
 
+  /*
+   * Close popup explicitly.
+   */
   const closePopup = () => {
     setIsPopupVisible(false);
   };
 
   return (
     <div className={Buttonstyle.Enrollbutton}>
+      {/* CTA BUTTON */}
       <button
         type="button"
         className={Buttonstyle.shinebtn}
-        onClick={openPopup}
+        onClick={togglePopup}
       >
-        <span className={Buttonstyle.btntext}>{label}</span>
+        <span className={Buttonstyle.btntext}>
+          {label}
+        </span>
       </button>
 
-      {isPopupVisible &&
-        typeof document !== "undefined" &&
+      {/*
+       * IMPORTANT:
+       *
+       * Previously SignInForm was rendered directly inside
+       * .Enrollbutton.
+       *
+       * That meant the popup could become trapped inside the
+       * Header's left/right stacking contexts.
+       *
+       * createPortal() renders the form directly under
+       * document.body instead.
+       */}
+      {isMounted &&
+        isPopupVisible &&
         createPortal(
           <SignInForm
             onClose={closePopup}
