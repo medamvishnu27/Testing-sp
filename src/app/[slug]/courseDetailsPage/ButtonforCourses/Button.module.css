@@ -6,68 +6,130 @@
   align-items: center;
 }
 
-.shinebtn:hover {
-  background-color: #35258f;
-}
+/* =========================
+   MAIN BUTTON
+   ========================= */
 
 .shinebtn {
   position: relative;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
   padding: 12px 20px;
+
   height: auto;
+
   font-size: 20px;
   font-weight: bold;
-  color: #fff;
+
+  color: #ffffff;
   background-color: #553cdf;
+
   border: none;
   border-radius: 8px;
+
   overflow: hidden;
+
   cursor: pointer;
   outline: none;
-  transition: background-color 0.3s ease;
+
+  transition:
+    background-color 0.3s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
+
+.shinebtn:hover {
+  background-color: #35258f;
+
+  transform: translateY(-1px);
+
+  box-shadow: 0 6px 16px rgba(53, 37, 143, 0.2);
+}
+
+.shinebtn:active {
+  transform: translateY(0);
+}
+
+/* =========================
+   BUTTON TEXT
+   ========================= */
+
+.btntext {
+  position: relative;
+
+  /*
+   * Only puts the text above the shine animation.
+   * This does NOT affect the popup.
+   */
+  z-index: 1;
+}
+
+/* =========================
+   SHINE EFFECT
+   ========================= */
 
 .shinebtn::before {
   content: "";
+
   position: absolute;
+
   top: 0;
   left: -100%;
+
   width: 30%;
-  height: 100%; 
-  background: linear-gradient(
-    90deg,
-    #ffffff13 0%,
-    #ffffffd7 50%,
-    #ffffff13 100%
-  );
+  height: 100%;
+
+  background: linear-gradient(90deg,
+      #ffffff13 0%,
+      #ffffffd7 50%,
+      #ffffff13 100%);
+
   transform: skewX(-20deg);
+
   animation: shine 1.5s linear infinite;
+
+  pointer-events: none;
 }
 
 @keyframes shine {
   0% {
     left: -100%;
   }
+
   100% {
     left: 100%;
   }
 }
 
-@media(min-width:1025px) and (max-width: 1200px) {
+/* =========================
+   TABLET
+   ========================= */
+
+@media (min-width: 1025px) and (max-width: 1200px) {
   .shinebtn {
     padding: 12px 20px;
+
     font-size: 18px;
   }
 }
 
+/* =========================
+   SMALL MOBILE
+   ========================= */
 
-@media(max-width:376px){
-  .shinebtn{
-    display: inline-block;
+@media (max-width: 376px) {
+  .shinebtn {
+    display: inline-flex;
+
     width: 130px;
-  
-    padding: .8rem 0.8rem;
-    font-size: 1rem;  
+
+    padding: 0.8rem;
+
+    font-size: 1rem;
+
     margin-right: 20px;
   }
- 
 }
